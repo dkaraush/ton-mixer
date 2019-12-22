@@ -7,6 +7,7 @@ const fs = require('fs');
 
 const configFilename = 'config.json';
 let config = loadConfig(configFilename, {
+	n: arg('-n'),
 	log: arg(['-l', '--log', '--logs']),
 	wc: arg('-wc', '--wc'),
 	ssl: arg('--ssl')

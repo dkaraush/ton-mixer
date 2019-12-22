@@ -216,7 +216,7 @@ global.nodesInfo = function () {
 module.exports = function (config, TON) {
 	let mixer = {};
 	for (let i = 0; i < config.n; ++i) {
-		if (i >= config.n) {
+		if (i >= config.nodes.length) {
 			(async function (i) {
 				nodes[i] = await MixerNode.new(mixer, TON, i, config.wc);
 				appendConfig({nodes: nodes.map(n => n==null?null:n.address)});

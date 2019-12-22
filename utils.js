@@ -142,6 +142,12 @@ global.logRender = function () {
 	let nodesinfo = (typeof global.nodesInfo === 'function' ? global.nodesInfo() : '').split('\n');
 	if (nodesinfo[nodesinfo.length-1].length == 0)
 		nodesinfo.splice(nodesinfo.length-1, 1);
+	if (arg('--light')) {
+		term.moveTo(1,1);
+		term.bold('nodes:'+'\n');
+		nodesinfo.map(str => term(str + '\n'));
+		return;
+	}
 
 	term.moveTo(1,1);
 	term.grey('╓'+'─'.repeat(term.width-2)+'╖\n');
