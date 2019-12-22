@@ -1,0 +1,30 @@
+"TonUtil.fif" include
+
+true =: allow-bounce
+false =: force-bounce
+3 =: send-mode
+
+$1 "-1" $= =: bounce
+$2 true parse-load-address drop 2=: from
+$3 file>B =: private
+$4 true parse-load-address drop 2=: to
+$5 parse-int =: seqno
+$6 parse-int =: amount
+
+<b b> =: body
+<b  b{01} s, bounce 1 i, b{000100} s, 
+	to addr, 
+	amount Gram, 0 106 u, 
+  	body <s 2dup s-fits? not rot over 1 i, -rot { drop body ref, } { s, } cond
+b> =: internal_message
+
+<b  seqno 32 u,
+	send-mode 8 u,
+	internal_message ref,
+b>
+dup hashB private ed25519_sign
+<b swap B, swap <s s, b> =: external_message
+
+<b b{1000100} s, from addr, 0 Gram, b{00} s,
+   external_message <s s, 
+b> boc>B B>$ type

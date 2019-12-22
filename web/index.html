@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TON Mixer</title>
+    <link rel="stylesheet" type="text/css" href="https://rsms.me/inter/inter.css">
+    <style type="text/css">
+    	body, html, head {
+		    background: #FAFAFA;
+		    margin: 0;
+		    padding: 0;
+		    font-family: 'Inter', 'Roboto', 'Segoe UI', sans-serif;
+		}
+
+		body > div {
+		    width: 90%;
+		    max-width: 800px;
+		    margin: 0 auto;
+		    padding: 2% 0;
+		}
+
+		h1, h2, p {
+		    margin: 4px 0;
+		}
+
+		span.code {
+		    font-family: monospace;
+		    font-size: 125%;
+		}
+		div.code {
+			font-family: monospace;
+			margin: 4px 0;
+			display: inline-block;
+		}
+    </style>
+</head>
+<body>
+	<div>
+		<h1>TON Mixer</h1>
+		<i>Made by <a href="https://t.me/dkaraush">@dkaraush</a>, special for <a href="https://t.me/contest/139">2nd stage of blockchain contest</a>.</i>
+		<br>
+		<br>
+		<p>This <a href=".">website</a> is a frontend of <a href="//github.com/dkaraush/ton-mixer">TON Mixer</a> project. Here you can try to transfer your Grams through mixer nodes to not be tracked in open network.</p>
+		<br>
+		<h2>How does this work?</h2>
+		<p>The idea is too simple. We have at least two nodes: one node will receive, another will send your Grams. When the difference between them is too high, we switch them. So, in Blockchain explorer there would be no connection between them and you can continue selling weapons, slaves and drugs.</p>
+		<p>In my implementation, there are more than two nodes and you will receive your Grams from few of them, if we don't have enough in one.</p>
+		<p>Also, I take 5% of your transaction. I also don't calculate fees of transactions, so probably it will also affect on the result.</p>
+		<br>
+		<h2>Why?</h2>
+		<p>As always, <b>because I can!</b></p>
+		<br>
+		<h2>Application itself</h2>
+		<p><b>Warning:</b> this is a test project. I do not guarantee full anonimity right now, as I had only 2 weeks to create this app. You are welcome to find vulnerabilities and kick me from this contest. :D</p>
+		<p>The most bad thing is that now my service works fully on online <a href="//toncenter.com">toncenter.com</a> API (btw, thanks to <a href="//t.me/rulon">@rulon</a> for such great work). He said, that he will publish source code soon, so it will be possible to make all requests locally without "middleman". Now, this online API could compromise all nodes, that can help to compromise real transactions.</p>
+		<p><b>Warning:</b> currently, no transaction fees are calculated. Bugs and too high % from transaction could happen.</p>
+		<br>
+		<p>Type an address, where you want to receive your Grams:</p>
+		<input type="text" id="destaddr">
+		<button>Submit</button>
+		<p><span id="error"></span></p>
+		<br>
+		<br>
+
+		<p>Now we can send you back around <b>~<span id='max'>?</span> GR$</b>.</p>
+		<p>Send your Grams here: <span id='srcaddr'><i>enter destination address</i></span>.</p>
+	</div>
+	<script type="text/javascript">
+		$doc=document;
+		$=$doc.querySelector.bind($doc);
+		submit = $('button');
+		max = $('span#max');
+		distaddr = function () {return $('#destaddr').value};
+		srcaddr = function (v) {v == null ? $('#srcaddr').innerHTML = '<i>enter destination address</i>' : $('#srcaddr').innerText = v; };
+		err = $('span#error');
+
+		submit.addEventListener('click', function () {
+			
+		});
+	</script>
+</body>
+</html>

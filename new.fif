@@ -1,0 +1,48 @@
+"TonUtil.fif" include
+"Asm.fif" include
+
+// fift -s new.fif <wc> <pkdir> <bocdir>
+
+$1 (number) drop =: wc
+$2 =: pkdir
+$3 =: bocdir
+
+newkeypair =: public =: private
+
+"wallet-code.fif" include =: code
+<b
+	0 32 u,
+	public B,
+b> =: storage
+<b
+	0 32 u,
+b> =: rawmessage
+rawmessage hashB private ed25519_sign =: signature
+<b signature B, rawmessage <s s, b> =: message
+
+null =: libraries
+
+<b
+	b{0011} s,
+	code ref,
+	storage ref,
+	libraries dict,
+b> =: StateInit
+
+StateInit hashu =: address
+
+<b
+	b{1000100} s,
+	wc address addr,
+	b{000010} s,
+	StateInit <s s,
+	b{0} s,
+	message <s s,
+b> =: extmsg
+
+wc (.) +":" address 64 (0x.) $+ =: addr
+
+private pkdir addr $+ +".pk" B>file
+extmsg boc>B bocdir addr $+ +".boc" B>file
+
+addr type

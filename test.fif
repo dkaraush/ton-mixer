@@ -1,0 +1,28 @@
+"TonUtil.fif" include
+"Asm.fif" include
+
+newkeypair =: public =: private
+-1 =: wc
+"wallet-code.fif" include <s =: code
+<b
+	0 32 u,
+	public B,
+b> =: storage
+<b
+	0 32 u,
+b> =: rawmessage
+rawmessage hashB private ed25519_sign =: signature
+<b signature B, rawmessage <s s, b> <s =: message
+
+null =: libraries
+
+0 tuple 0x076ef1ea , // magic
+0 , 0 , // actions msg_sents
+1570470873 , // unix_time
+1 , 1 , 0 , // block_lt, trans_lt, rand_seed
+ 0 tuple 9223372036854775807 , dictnew , , // remaining balance
+0 , dictnew , // contract_address, global_config
+1 tuple // wrap to another tuple
+constant c7 
+
+message -1 code storage c7 runvmctx 
