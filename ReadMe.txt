@@ -16,7 +16,6 @@ Also, I take 5% of your transaction. I also don't calculate fees of transactions
 
 You can try it at https://tonweb.site/-1:2bcc9840e7b9ec6b77fe3543b4eefbf3ba6c69fd98f362b3d3b2f4b752adb5e8
 
-
 # How to deploy?
 
 1. Install fift globally.
@@ -26,3 +25,7 @@ You can change number of nodes: `node index -n 10`
 You can change workchain ID of new nodes: `node index -wc -1`
 You can run light version (less update of TUI): `node index --light`
 You can take all Grams from all nodes to one wallet by doing `node index --unload <address>`
+
+# Special thanks
+This project has been made using toncenter.com API, made by @rulon (telegram user).
+Now this mixer cannot guarantee fully anonimity, as it uses online API, that can compromise all nodes. However, the author of API said, that source code will be published soon and it will be able to use it locally.
