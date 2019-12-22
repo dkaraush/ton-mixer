@@ -26,6 +26,8 @@ function _api(methods) {
 			return;
 		}
 
+		res.setHeader('Access-Control-Allow-Origin', '*');
+
 		let query = parsequery(req.url);
 		let result = methods[methodname](req.method, query, req);
 		if (result == null || typeof result === 'undefined') {

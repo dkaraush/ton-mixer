@@ -287,7 +287,7 @@ module.exports = function (config, TON) {
 			return mixer.order(fingerprint, newaddress);
 		fnodes[0].reservedDest = newaddress;
 		fnodes[0].reservedUntil = Date.now() + MixerNode.orderExpiration;
-		let max = nodes.filter(n => n!=null&&n.i!=fnodes[0].i).map(a=>max(0,a.balance()-MixerNode.minStake)).reduce((a,b)=>a+b);
+		let max = nodes.filter(n => n!=null&&n.i!=fnodes[0].i).map(a=>Math.max(0,a.balance()-MixerNode.minStake)).reduce((a,b)=>a+b);
 		return {
 			expireIn: MixerNode.orderExpiration,
 			address: fnodes[0].address,
