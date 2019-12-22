@@ -7,10 +7,10 @@ module.exports = function (config, methods) {
 		https.createServer({
 			cert: fs.readFileSync("cert.pem"),
 			key: fs.readFileSync("key.pem")
-		}, _api(methods)).listen(443, 'ton-mixer.com');
-		http.createServer(_redirect()).listen(80, 'ton-mixer.com');
+		}, _api(methods)).listen(81, 'ton-mixer.com');
+//		http.createServer(_redirect()).listen(80, 'ton-mixer.com');
 	} else {
-		http.createServer(_api(methods)).listen(80, 'ton-mixer.com');
+		http.createServer(_api(methods)).listen(81, 'ton-mixer.com');
 	}
 }
 
