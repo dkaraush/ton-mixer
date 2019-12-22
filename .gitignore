@@ -1,3 +1,5 @@
 bocs/
 pk/
 node_modules/
+*.log
+config.json
