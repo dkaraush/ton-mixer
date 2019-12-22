@@ -291,7 +291,7 @@ module.exports = function (config, TON) {
 		let max = nodes.filter(n => n!=null&&n.i!=fnodes[0].i).map(a=>Math.max(0,a.balance()-MixerNode.minStake)).reduce((a,b)=>a+b);
 		return {
 			expireIn: MixerNode.orderExpiration,
-			_expired: nodei.reservedUntil,
+			_expired: fnodes[0].reservedUntil,
 			address: fnodes[0].address,
 			max: max
 		};
