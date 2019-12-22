@@ -151,7 +151,7 @@ class MixerNode {
 			let acc = await this.TON.accountState(address), bounce = true;
 			if (!acc.success && acc.error == 'account state is empty')
 				bounce = false;
-			let boc = await this.TON.fiftRun('send.fif', [bounce ? '-1' : '0', this.address, MixerNode.pkDir+this.address+'.pk', address, this.seqno, (Math.floor(amount)).toString()]);
+			let boc = await this.TON.fiftRun('send.fif', [bounce ? '-1' : '0', this.address, MixerNode.keysDir+this.address+'.pk', address, this.seqno, (Math.floor(amount)).toString()]);
 			let res = await this.TON.sendfile(boc);
 			if (res.result != 'Ok') {
 				this.warn('failed to transfer grams:', res);
@@ -215,8 +215,8 @@ global.nodesInfo = function () {
 
 module.exports = function (config, TON) {
 	let mixer = {};
-	for (let i = 0; i < config.nodes.length; ++i) {
-		if (i >= config.nodes.length) {
+	for (let i = 0; i < config.n; ++i) {
+		if (i >= config.n) {
 			(async function (i) {
 				nodes[i] = await MixerNode.new(mixer, TON, i, config.wc);
 				appendConfig({nodes: nodes.map(n => n==null?null:n.address)});
