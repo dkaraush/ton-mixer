@@ -33,6 +33,12 @@
 			margin: 4px 0;
 			display: inline-block;
 		}
+		input, button {
+			font-size: 100%;
+		}
+		.error {
+			color: red;
+		}
     </style>
 </head>
 <body>
@@ -63,8 +69,9 @@
 		<br>
 		<br>
 
-		<p>Now we can send you back around <b>~<span id='max'>?</span> GR$</b>.</p>
+		<p>We can send you back around <b>~<span id='max'>?</span> GR$</b>.</p>
 		<p>Send your Grams here: <span id='srcaddr'><i>enter destination address</i></span>.</p>
+		<p>Transaction could be received <span id="expired">~~~</span></p>
 	</div>
 	<script type="text/javascript">
 		$doc=document;
@@ -73,11 +80,45 @@
 		max = $('span#max');
 		distaddr = function () {return $('#destaddr').value};
 		srcaddr = function (v) {v == null ? $('#srcaddr').innerHTML = '<i>enter destination address</i>' : $('#srcaddr').innerText = v; };
-		err = $('span#error');
+		err = function (v) {$('span#error').innerText = v};
 
+		let orderTaken = -1;
 		submit.addEventListener('click', function () {
-			
+			if (!/^-{0,1}\d+(\:[a-fA-F0-9]{64})$/.test(distaddr())) {
+				err('bad destination address');
+				return;
+			}
+
+			let xhr = new XMLHttpRequest();
+			xhr.open('GET', '/order?address=' + encodeURIComponent(distaddr()), true);
+			xhr.send();
+			xhr.onreadystatechange = function () {
+				if (xhr.readyState != 4) return;
+
+				if (xhr.status == 200) {
+					let data = JSON.parse(xhr.responseText);
+					if (data.status == 'ok') {
+						orderTaken = Date.now();
+						srcaddr(data.address);
+						updExpired();
+						max.innerHTML = (data.max / 1000000000);
+						err('');
+					} else {
+						orderTaken = -1;
+						srcaddr(null);
+						updExpired();
+						max.innerHTML = '?';
+						err(data.reason);
+					}
+				} else {
+					err('bad status code: ' + xhr.statusCode);
+				}
+			}
 		});
+
+		function updExpired() {
+			$("#expired").innerText = orderTaken == -1 ? '~~~' : (data.expireIn / 1000) + 's';
+		}
 	</script>
 </body>
 </html>

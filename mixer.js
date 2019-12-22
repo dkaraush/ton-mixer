@@ -168,6 +168,7 @@ class MixerNode {
 		this.sendgrams(max(0, this.realBalance-MixerNode.minStake), address);
 	}
 }
+MixerNode.orderExpiration = 1000 * 60 * 4;
 MixerNode.minStake = Gram(0.15);
 MixerNode._dir = function (name, dirname) {
 	MixerNode[name+'Dir'] = dirname;
@@ -268,15 +269,15 @@ module.exports = function (config, TON) {
 		log("choosed " + $bright + 'node #' + nodei.i + $reset + ' for transaction');
 
 		nodei.reserved = true;
-		nodei.reservedUntil = Date.now() + 1000 * 60 * 4;
+		nodei.reservedUntil = Date.now() + MixerNode.orderExpiration;
 		nodei.reservedDest = address;
 		nodei.reservedFingerprint = fingerprint;
 		logRender();
 
-		let max = nodes.filter(n => n!=null&&n.i!=nodei.i).map(a=>max(0,a.balance()-MixerNode.minStake)).reduce((a,b)=>a+b);
+		let max = nodes.filter(n => n!=null&&n.i!=nodei.i).map(a=>Math.max(0,a.balance()-MixerNode.minStake)).reduce((a,b)=>a+b);
 		return {
-			expired: nodei.reservedUntil,
-			income: nodei.address,
+			expireIn: MixerNode.orderExpiration,
+			address: nodei.address,
 			max: max
 		};
 	};
@@ -285,11 +286,11 @@ module.exports = function (config, TON) {
 		if (fnodes.length == 0)
 			return mixer.order(fingerprint, newaddress);
 		fnodes[0].reservedDest = newaddress;
-		fnodes[0].reservedUntil = Date.now() + 1000 * 60 * 4;
+		fnodes[0].reservedUntil = Date.now() + MixerNode.orderExpiration;
 		let max = nodes.filter(n => n!=null&&n.i!=fnodes[0].i).map(a=>max(0,a.balance()-MixerNode.minStake)).reduce((a,b)=>a+b);
 		return {
-			expired: fnodes[0].reservedUntil,
-			income: fnodes[0].address,
+			expireIn: MixerNode.orderExpiration,
+			address: fnodes[0].address,
 			max: max
 		};
 	}
