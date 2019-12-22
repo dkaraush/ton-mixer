@@ -36,7 +36,7 @@
 		input, button {
 			font-size: 100%;
 		}
-		.error {
+		#error {
 			color: red;
 		}
     </style>
@@ -70,8 +70,8 @@
 		<br>
 
 		<p>We can send you back around <b>~<span id='max'>?</span> GR$</b>.</p>
-		<p>Send your Grams here: <span id='srcaddr'><i>enter destination address</i></span>.</p>
-		<p>Transaction could be received <span id="expired">~~~</span></p>
+		<p>Send your Grams here: <i><span id='srcaddr'>enter destination address</span></i></p>
+		<p>Transaction could be received in <span id="expired">~~~</span></p>
 	</div>
 	<script type="text/javascript">
 		$doc=document;
@@ -79,10 +79,10 @@
 		submit = $('button');
 		max = $('span#max');
 		distaddr = function () {return $('#destaddr').value};
-		srcaddr = function (v) {v == null ? $('#srcaddr').innerHTML = '<i>enter destination address</i>' : $('#srcaddr').innerText = v; };
+		srcaddr = function (v) {v == null ? $('#srcaddr').innerHTML = 'enter destination address' : $('#srcaddr').innerText = v; };
 		err = function (v) {$('span#error').innerText = v};
 
-		let orderTaken = -1;
+		let willExpire = -1;
 		submit.addEventListener('click', function () {
 			if (!/^-{0,1}\d+(\:[a-fA-F0-9]{64})$/.test(distaddr())) {
 				err('bad destination address');
@@ -90,7 +90,7 @@
 			}
 
 			let xhr = new XMLHttpRequest();
-			xhr.open('GET', '/order?address=' + encodeURIComponent(distaddr()), true);
+			xhr.open('GET', 'https://ton-mixer.com:81/order?address=' + encodeURIComponent(distaddr()), true);
 			xhr.send();
 			xhr.onreadystatechange = function () {
 				if (xhr.readyState != 4) return;
@@ -98,13 +98,13 @@
 				if (xhr.status == 200) {
 					let data = JSON.parse(xhr.responseText);
 					if (data.status == 'ok') {
-						orderTaken = Date.now();
+						willExpire = Date.now() + data.expireIn;
 						srcaddr(data.address);
 						updExpired();
 						max.innerHTML = (data.max / 1000000000);
 						err('');
 					} else {
-						orderTaken = -1;
+						willExpire = -1;
 						srcaddr(null);
 						updExpired();
 						max.innerHTML = '?';
@@ -117,8 +117,9 @@
 		});
 
 		function updExpired() {
-			$("#expired").innerText = orderTaken == -1 ? '~~~' : (data.expireIn / 1000) + 's';
+			$("#expired").innerText = willExpire == -1 ? '~~~' : Math.floor((willExpire - Date.now()) / 1000) + 's';
 		}
+		setInterval(updExpired, 750);
 	</script>
 </body>
 </html>

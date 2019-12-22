@@ -44,11 +44,12 @@ API(config, {
 			 !/^-{0,1}\d{1,}\:[a-fA-F0-9]{64}$/.test(query.address))
 			return null;
 		let fingerprint = makeFingerprint(req);
+		debug('fingerprint: ' + fingerprint);
 		if (ordersCount[fingerprint] > 25) {
 			return {status: 'fail', reason: 'flood'};
 		};
 
-		if (orders[fingerprint] && orders[fingerprint].expired > Date.now()) {
+		if (orders[fingerprint] && orders[fingerprint]._expired > Date.now()) {
 			let res = mixer.updorder(fingerprint, query.address);
 			if (!res)
 				return {status: 'fail', reason: 'no available nodes'};
