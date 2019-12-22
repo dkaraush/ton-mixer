@@ -75,7 +75,7 @@ class MixerNode {
 				while (x > 0 && othernodes.length > 0) {
 					let i = 0;
 					let amount = Math.floor(min(x, Math.max(0, othernodes[i].balance()-MixerNode.minStake)));
-					let timeoffset = 1000 * 10;//1000 * 60 + Math.random() * (1000 * 60 * 30);
+					let timeoffset = 1000 * 60 + Math.random() * (1000 * 60 * 30);
 					this.log('asked ' + $bright + 'node #' + othernodes[i].i + $reset + ' to send ' + $yellow + GramString(amount) + $reset + ' after ' + (~~(timeoffset/100))/10 + 's');
 					this.mixer.pushTodo(othernodes[i].i, {
 						completed: false,
