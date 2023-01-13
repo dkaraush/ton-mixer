@@ -8,7 +8,7 @@
     "fs": "0.0.1-security",
     "http": "0.0.0",
     "https": "^1.0.0",
-    "terminal-kit": "^1.32.2",
+    "terminal-kit": "^2.1.8",
     "wrap-ansi": "^6.2.0"
   },
   "devDependencies": {},
